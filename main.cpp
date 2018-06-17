@@ -38,7 +38,7 @@ public:
 };
 
 // Implicitly-defined member functions
-//-----------------------------------------------
+
 template<class T, std::size_t N>
 array<T, N>::array()
 {
@@ -77,7 +77,7 @@ array<T, N> array<T, N>::operator=(const array<T, N>& second)
 
 //---------------------------------------------
 // Element-access
-//---------------------------------------------
+
 
 template<class T, std::size_t N>
 typename array<T, N>::reference array<T, N>::at(array<T, N>::size_type pos)
