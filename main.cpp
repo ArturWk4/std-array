@@ -34,6 +34,16 @@ public:
 
     reference at(size_type pos);
     reference operator[](size_type pos);
+    reference front();
+    reference back();
+    pointer data() noexcept;
+
+    iterator begin() noexcept;
+    const_iterator cbegin() const noexcept;
+    iterator end() noexcept;
+    const_iterator cend() const noexcept;
+
+
 
 };
 
@@ -92,13 +102,61 @@ typename array<T, N>::reference array<T, N>::operator[](array<T, N>::size_type p
     return storage[pos];
 }
 
+template<class T, std::size_t N>
+typename array<T, N>::reference array<T, N>::front()
+{
+    return storage[0];
 }
+
+template<class T, std::size_t N>
+typename array<T, N>::reference array<T, N>::back()
+{
+    return storage[array_size-1];
+}
+
+template<class T, std::size_t N>
+typename array<T, N>::pointer array<T, N>::data() noexcept
+{
+    return storage;
+}
+
+//-------------------------------------------------
+//Iterators
+
+template<class T, std::size_t N>
+typename array<T, N>::iterator array<T, N>::begin() noexcept
+{
+    return storage;
+}
+
+template<class T, std::size_t N>
+typename array<T, N>::const_iterator array<T, N>::cbegin() const noexcept
+{
+    return storage;
+}
+
+template<class T, std::size_t N>
+typename array<T, N>::iterator array<T, N>::end() noexcept
+{
+    return storage + array_size;
+}
+
+template<class T, std::size_t N>
+typename array<T, N>::const_iterator array<T, N>::cend() const noexcept
+{
+    return storage + array_size;
+}
+
+
+}
+
 
 
 int main()
 {
     my::array<int, 4> a{2, 4, 1, 14};
-    my::array<int, 4> b = a;
-    std::cout << a[3] << std::endl;
+
+    for(my::array<int, 4>::iterator i = a.begin(); i != a.end(); ++i)
+    std::cout << *i << std::endl;
     return 0;
 }
