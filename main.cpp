@@ -23,6 +23,8 @@ public:
     using const_pointer = const value_type*;
     using iterator = T*;
     using const_iterator = const T*;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::const_reverse_iterator<iterator>;
 private:
     size_type array_size = N;
     T* storage;
@@ -42,9 +44,16 @@ public:
     const_iterator cbegin() const noexcept;
     iterator end() noexcept;
     const_iterator cend() const noexcept;
+    reverse_iterator rbegin() noexcept;
+    const_reverse_iterator crbegin() const noexcept;
+    reverse_iterator rend() noexcept;
+    const_reverse_iterator crend() const noexcept;
 
+    bool empty() const noexcept;
+    size_type size() const noexcept;
+    size_type max_size() const noexcept;
 
-
+    void fill(const T& value);
 };
 
 // Implicitly-defined member functions
@@ -146,6 +155,18 @@ typename array<T, N>::const_iterator array<T, N>::cend() const noexcept
 {
     return storage + array_size;
 }
+
+// Capacity
+
+template<class T, std::size_t N>
+bool array<T, N>::empty() const noexcept
+{
+    return array_size == 0;
+}
+
+
+
+
 
 
 }
