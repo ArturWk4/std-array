@@ -2,17 +2,18 @@
 #include <initializer_list>
 #include <stdexcept>
 #include <array>
+#include <algorithm>
 namespace my
 {
 template<class T, std::size_t N>
 class array
 {
-    friend operator==(my::array<T, N>& op1, my::array<T, N>& op2);
-    friend operator!=(my::array<T, N>& op1, my::array<T, N>& op2);
-    friend operator<(my::array<T, N>& op1, my::array<T, N>& op2);
-    friend operator<=(my::array<T, N>& op1, my::array<T, N>& op2);
-    friend operator>(my::array<T, N>& op1, my::array<T, N>& op2);
-    friend operator>=(my::array<T, N>& op1, my::array<T, N>& op2);
+    friend operator==(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend operator!=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend operator<(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend operator<=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend operator>(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend operator>=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
 public:
     using value_type = T;
     using size_type = std::size_t;
@@ -187,19 +188,37 @@ void array<T, N>::fill(const T& value)
         *i = value;
 }
 
+template<class T, std::size_t N>
+bool operator==( my::array<T, N>& op1, my::array<T, N>& op2)
+{
+    for(typename array<T, N>::iterator i = op1.begin(), j = op2.begin(); i != op1.end(); ++i, ++j)
+    {
+        if(*i != *j)
+            return false;
+    }
+    return true;
 }
+
+template<class T, std::size_t N>
+bool operator!=( my::array<T, N>& op1, my::array<T, N>& op2)
+{
+    return !(op1.storage == op2.storage);
+}
+
+}
+
 
 
 
 int main()
 {
     my::array<int, 6> a{1,2,4,5,6,7};
-
+    my::array<int, 6> b{1,2,4,5,6,7};
     a.fill(4);
     for(my::array<int, 6>::iterator i = a.begin(); i != a.end(); ++i)
         std::cout << *(i) << std::endl;
 
-        std::cout << "\n";
+
 
     return 0;
 }
