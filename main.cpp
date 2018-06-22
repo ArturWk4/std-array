@@ -1,7 +1,7 @@
 #include <iostream>
 #include <initializer_list>
 #include <stdexcept>
-
+#include <array>
 namespace my
 {
 template<class T, std::size_t N>
@@ -24,15 +24,15 @@ public:
     using iterator = T*;
     using const_iterator = const T*;
     using reverse_iterator = std::reverse_iterator<iterator>;
-    using const_reverse_iterator = std::const_reverse_iterator<iterator>;
 private:
-    size_type array_size = N;
+    size_type reserved_size = N;
+    size_type array_size = 0;
     T* storage;
 public:
     array();
     array(std::initializer_list<T> _list);
     ~array();
-    array operator=(const array<T, N>& second);
+    array operator=(array<T, N>& second); //invalid implementation
 
     reference at(size_type pos);
     reference operator[](size_type pos);
@@ -45,9 +45,7 @@ public:
     iterator end() noexcept;
     const_iterator cend() const noexcept;
     reverse_iterator rbegin() noexcept;
-    const_reverse_iterator crbegin() const noexcept;
     reverse_iterator rend() noexcept;
-    const_reverse_iterator crend() const noexcept;
 
     bool empty() const noexcept;
     size_type size() const noexcept;
@@ -61,18 +59,22 @@ public:
 template<class T, std::size_t N>
 array<T, N>::array()
 {
-    storage = new T[array_size];
+    storage = new T[reserved_size];
+    for(size_type i = 0; i < reserved_size; ++i)
+        storage[i] = 0;
 }
 
 template<class T, std::size_t N>
 array<T, N>::array(std::initializer_list<T> _list)
 {
-    if(_list.size() != array_size)
-        throw std::out_of_range("Size of my::array and size of std::initialize_list should be equals!");
-    storage = new T[array_size];
-    for(size_type i = 0; i < array_size; ++i)
+    storage = new T[reserved_size];
+    for(size_type i = 0; i < reserved_size; ++i)
     {
-        storage[i] = *(_list.begin() + i);
+        if(array_size < _list.size())
+            storage[i] = *(_list.begin() + i);
+        else
+            storage[i] = 0;
+        ++array_size;
     }
 }
 
@@ -83,13 +85,15 @@ array<T, N>::~array()
 }
 
 template<class T, std::size_t N>
-array<T, N> array<T, N>::operator=(const array<T, N>& second)
+array<T, N> array<T, N>::operator=(array<T, N>& second)
 {
-    if(array_size != second.array_size)
-        throw std::out_of_range("(operator=): Size of both my::arrays should be equals");
 
-    for(size_type i = 0; i < array_size; ++i)
-        storage[i] = second.storage[i];
+    for(iterator i = this->begin(), j = second.begin(); i != this->end(); ++i, ++j)
+    {
+        *i = *j;
+        std::cout << *i << " "  << "\n";
+    }
+
     return *this;
 }
 
@@ -120,7 +124,7 @@ typename array<T, N>::reference array<T, N>::front()
 template<class T, std::size_t N>
 typename array<T, N>::reference array<T, N>::back()
 {
-    return storage[array_size-1];
+    return storage[reserved_size-1];
 }
 
 template<class T, std::size_t N>
@@ -147,13 +151,13 @@ typename array<T, N>::const_iterator array<T, N>::cbegin() const noexcept
 template<class T, std::size_t N>
 typename array<T, N>::iterator array<T, N>::end() noexcept
 {
-    return storage + array_size;
+    return storage + reserved_size;
 }
 
 template<class T, std::size_t N>
 typename array<T, N>::const_iterator array<T, N>::cend() const noexcept
 {
-    return storage + array_size;
+    return storage + reserved_size;
 }
 
 // Capacity
@@ -164,10 +168,24 @@ bool array<T, N>::empty() const noexcept
     return array_size == 0;
 }
 
+template<class T, std::size_t N>
+typename array<T, N>::size_type array<T, N>::size() const noexcept
+{
+    return array_size;
+}
 
+template<class T, std::size_t N>
+typename array<T, N>::size_type array<T, N>::max_size() const noexcept
+{
+    return reserved_size;
+}
 
-
-
+template<class T, std::size_t N>
+void array<T, N>::fill(const T& value)
+{
+    for(iterator i = this->begin(); i != this->end(); ++i)
+        *i = value;
+}
 
 }
 
@@ -175,9 +193,13 @@ bool array<T, N>::empty() const noexcept
 
 int main()
 {
-    my::array<int, 4> a{2, 4, 1, 14};
+    my::array<int, 6> a{1,2,4,5,6,7};
 
-    for(my::array<int, 4>::iterator i = a.begin(); i != a.end(); ++i)
-    std::cout << *i << std::endl;
+    a.fill(4);
+    for(my::array<int, 6>::iterator i = a.begin(); i != a.end(); ++i)
+        std::cout << *(i) << std::endl;
+
+        std::cout << "\n";
+
     return 0;
 }
