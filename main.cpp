@@ -53,6 +53,7 @@ public:
     size_type max_size() const noexcept;
 
     void fill(const T& value);
+    void swap(array<T, N>& other) noexcept;
 };
 
 // Implicitly-defined member functions
@@ -186,6 +187,13 @@ void array<T, N>::fill(const T& value)
         *i = value;
 }
 
+template<class T, std::size_t N>
+void array<T, N>::swap(array<T, N>& other) noexcept
+{
+    for(typename array<T, N>::iterator i = this->begin(), j = other.begin(); i != this->end(); ++i, ++j)
+        std::swap(*i, *j);
+}
+
 //------------------------------------------------------------------
 // Non-member functions
 
@@ -235,13 +243,12 @@ bool operator>(my::array<T, N>& op1, my::array<T, N>& op2)
 
 int main()
 {
-    my::array<int, 6> a{1,2,4,5,6,7};
-    my::array<int, 6> b{1,2,4,5,6,7};
+    my::array<int, 6> a{1,2,3,4,5,6};
+    my::array<int, 6> b{1,3,3,4,5,6};
 
-    std::array<int, 4> a1{1,2,3,4};
-    std::array<int, 4> b1{1,2,2,4};
 
-    std::cout << (a > b);
+    for(my::array<int, 6>::iterator i = b.begin(); i != b.end(); ++i)
+        std::cout << *i << "\n";
 
     return 0;
 }
