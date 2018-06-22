@@ -93,7 +93,7 @@ void array<T, N>::operator=(array<T, N>& second)
 }
 
 
-//---------------------------------------------
+//------------------------------------------------------------------
 // Element-access
 
 
@@ -128,7 +128,7 @@ typename array<T, N>::pointer array<T, N>::data() noexcept
     return storage;
 }
 
-//-------------------------------------------------
+//------------------------------------------------------------------
 //Iterators
 
 template<class T, std::size_t N>
@@ -155,6 +155,7 @@ typename array<T, N>::const_iterator array<T, N>::cend() const noexcept
     return storage + reserved_size;
 }
 
+//------------------------------------------------------------------
 // Capacity
 
 template<class T, std::size_t N>
@@ -175,6 +176,9 @@ typename array<T, N>::size_type array<T, N>::max_size() const noexcept
     return reserved_size;
 }
 
+//------------------------------------------------------------------
+// Operations
+
 template<class T, std::size_t N>
 void array<T, N>::fill(const T& value)
 {
@@ -182,14 +186,15 @@ void array<T, N>::fill(const T& value)
         *i = value;
 }
 
+//------------------------------------------------------------------
+// Non-member functions
+
 template<class T, std::size_t N>
 bool operator==( my::array<T, N>& op1, my::array<T, N>& op2)
 {
     for(typename array<T, N>::iterator i = op1.begin(), j = op2.begin(); i != op1.end(); ++i, ++j)
-    {
         if(*i != *j)
             return false;
-    }
     return true;
 }
 
@@ -204,8 +209,10 @@ bool operator<(my::array<T, N>& op1, my::array<T, N>& op2)
 {
     for(typename array<T, N>::iterator i = op1.begin(), j = op2.begin(); i != op1.end(); ++i, ++j)
     {
-        if(*i < *j) return true;
-        if(*j < *i) return false;
+        if(*i < *j)
+            return true;
+        if(*j < *i)
+            return false;
     }
 }
 
@@ -214,8 +221,10 @@ bool operator>(my::array<T, N>& op1, my::array<T, N>& op2)
 {
     for(typename array<T, N>::iterator i = op1.begin(), j = op2.begin(); i != op1.end(); ++i, ++j)
     {
-        if(*i > *j) return true;
-        if(*j > *i) return false;
+        if(*i > *j)
+            return true;
+        if(*j > *i)
+            return false;
     }
 }
 
@@ -228,16 +237,10 @@ int main()
 {
     my::array<int, 6> a{1,2,4,5,6,7};
     my::array<int, 6> b{1,2,4,5,6,7};
-/*
-
-    for(my::array<int, 6>::iterator i = b.begin(); i != b.end(); ++i)
-        std::cout << *i << "\n";
-
-        std::cout << (a!=b);
-*/
 
     std::array<int, 4> a1{1,2,3,4};
     std::array<int, 4> b1{1,2,2,4};
+
     std::cout << (a > b);
 
     return 0;
