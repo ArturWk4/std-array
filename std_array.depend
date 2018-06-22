@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1529662235 source:d:\artur\programs\codeblocks\myprojects\std_array\main.cpp
+	<iostream>
+	<initializer_list>
+	<stdexcept>
+	<array>
+	<algorithm>
+

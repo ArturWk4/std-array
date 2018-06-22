@@ -8,12 +8,12 @@ namespace my
 template<class T, std::size_t N>
 class array
 {
-    friend operator==(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend operator!=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend operator<(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend operator<=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend operator>(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend operator>=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend bool operator==(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend bool operator!=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend bool operator<(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend bool operator<=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend bool operator>(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend bool operator>=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
 public:
     using value_type = T;
     using size_type = std::size_t;
@@ -33,7 +33,7 @@ public:
     array();
     array(std::initializer_list<T> _list);
     ~array();
-    array operator=(array<T, N>& second); //invalid implementation
+    void operator=(array<T, N>& second);
 
     reference at(size_type pos);
     reference operator[](size_type pos);
@@ -86,16 +86,10 @@ array<T, N>::~array()
 }
 
 template<class T, std::size_t N>
-array<T, N> array<T, N>::operator=(array<T, N>& second)
+void array<T, N>::operator=(array<T, N>& second)
 {
-
     for(iterator i = this->begin(), j = second.begin(); i != this->end(); ++i, ++j)
-    {
         *i = *j;
-        std::cout << *i << " "  << "\n";
-    }
-
-    return *this;
 }
 
 
@@ -200,9 +194,9 @@ bool operator==( my::array<T, N>& op1, my::array<T, N>& op2)
 }
 
 template<class T, std::size_t N>
-bool operator!=( my::array<T, N>& op1, my::array<T, N>& op2)
+bool operator!=(my::array<T, N>& op1, my::array<T, N>& op2)
 {
-    return !(op1.storage == op2.storage);
+    return !(op1 == op2);
 }
 
 }
@@ -214,11 +208,17 @@ int main()
 {
     my::array<int, 6> a{1,2,4,5,6,7};
     my::array<int, 6> b{1,2,4,5,6,7};
-    a.fill(4);
-    for(my::array<int, 6>::iterator i = a.begin(); i != a.end(); ++i)
-        std::cout << *(i) << std::endl;
+/*
 
+    for(my::array<int, 6>::iterator i = b.begin(); i != b.end(); ++i)
+        std::cout << *i << "\n";
 
+        std::cout << (a!=b);
+*/
+
+    std::array<int, 4> a1{1,2,3,4};
+    std::array<int, 4> b1{1,1,1,6};
+    std::cout << (a1 < b1);
 
     return 0;
 }
