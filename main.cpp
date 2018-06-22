@@ -8,12 +8,12 @@ namespace my
 template<class T, std::size_t N>
 class array
 {
-    friend bool operator==(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend bool operator!=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend bool operator<(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend bool operator<=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend bool operator>(const my::array<T, N>& op1, const  my::array<T, N>& op2);
-    friend bool operator>=(const my::array<T, N>& op1, const  my::array<T, N>& op2);
+    friend bool operator==(const my::array<T, N>& op1, const my::array<T, N>& op2);
+    friend bool operator!=(const my::array<T, N>& op1, const my::array<T, N>& op2);
+    friend bool operator<(const my::array<T, N>& op1,  const my::array<T, N>& op2);
+    friend bool operator<=(const my::array<T, N>& op1, const my::array<T, N>& op2);
+    friend bool operator>(const my::array<T, N>& op1,  const my::array<T, N>& op2);
+    friend bool operator>=(const my::array<T, N>& op1, const my::array<T, N>& op2);
 public:
     using value_type = T;
     using size_type = std::size_t;
@@ -199,6 +199,26 @@ bool operator!=(my::array<T, N>& op1, my::array<T, N>& op2)
     return !(op1 == op2);
 }
 
+template<class T, std::size_t N>
+bool operator<(my::array<T, N>& op1, my::array<T, N>& op2)
+{
+    for(typename array<T, N>::iterator i = op1.begin(), j = op2.begin(); i != op1.end(); ++i, ++j)
+    {
+        if(*i < *j) return true;
+        if(*j < *i) return false;
+    }
+}
+
+template<class T, std::size_t N>
+bool operator>(my::array<T, N>& op1, my::array<T, N>& op2)
+{
+    for(typename array<T, N>::iterator i = op1.begin(), j = op2.begin(); i != op1.end(); ++i, ++j)
+    {
+        if(*i > *j) return true;
+        if(*j > *i) return false;
+    }
+}
+
 }
 
 
@@ -217,8 +237,8 @@ int main()
 */
 
     std::array<int, 4> a1{1,2,3,4};
-    std::array<int, 4> b1{1,1,1,6};
-    std::cout << (a1 < b1);
+    std::array<int, 4> b1{1,2,2,4};
+    std::cout << (a > b);
 
     return 0;
 }
